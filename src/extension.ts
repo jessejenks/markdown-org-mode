@@ -5,6 +5,7 @@ import {
 import {
     insertHeading,
     insertSubheading,
+    toggleLineAndHeading,
 } from "./headings";
 
 export function activate(context: ExtensionContext) {
@@ -13,9 +14,13 @@ export function activate(context: ExtensionContext) {
         insertSubheading,
     );
 
+    const toggleLineAndHeadingCmd = commands.registerTextEditorCommand("markdown-org-mode.toggleLineAndHeading",
+        toggleLineAndHeading,
+    );
     context.subscriptions.push(insertHeadingCmd);
     context.subscriptions.push(insertSubheadingCmd);
 
+    context.subscriptions.push(toggleLineAndHeadingCmd);
 }
 
 export function deactivate() {}

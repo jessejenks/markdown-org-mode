@@ -397,3 +397,208 @@ suite("Tests Inserting Subheadings", () => {
         await runTestCasesOnCommand(testCases, "markdownOrgMode.insertSubheading");
     });
 });
+
+suite("Toggling between lines and heading", () => {
+    test ("Should toggle lines and top level headings", async () => {
+        const testCases: CommandTestCase[] = [
+            {
+                input: "",
+                output: "# ",
+                position: new Position(0, 0),
+                finalPosition: new Position(0, 2),
+            },
+            {
+                input: "# ",
+                output: "",
+                position: new Position(0, 2),
+                finalPosition: new Position(0, 0),
+            },
+            {
+                input: "   ",
+                output: "#    ",
+                position: new Position(0, 0),
+                finalPosition: new Position(0, 2),
+            },
+            {
+                input: "#    ",
+                output: "   ",
+                position: new Position(0, 2),
+                finalPosition: new Position(0, 0),
+            },
+            {
+                input: "Blah blah",
+                output: "# Blah blah",
+                position: new Position(0, 4),
+                finalPosition: new Position(0, 6),
+            },
+            {
+                input: "# Blah blah",
+                output: "Blah blah",
+                position: new Position(0, 6),
+                finalPosition: new Position(0, 4),
+            },
+            {
+                input: [
+                    "# Blah blah",
+                    "Blah blah 2",
+                ],
+                output: [
+                    "# Blah blah",
+                    "# Blah blah 2",
+                ],
+                position: new Position(1, 4),
+                finalPosition: new Position(1, 6),
+            },
+            {
+                input: [
+                    "# Blah blah",
+                    "# Blah blah 2",
+                ],
+                output: [
+                    "# Blah blah",
+                    "Blah blah 2",
+                ],
+                position: new Position(1, 6),
+                finalPosition: new Position(1, 4),
+            },
+        ];
+
+        await runTestCasesOnCommand(testCases, "markdown-org-mode.toggleLineAndHeading");
+    });
+
+    test("Should toggle lines and headings with correct scope depth", async () => {
+        const testCases: CommandTestCase[] = [
+            {
+                input: [
+                    "## Blah blah 1.1",
+                    ""
+                ],
+                output: [
+                    "## Blah blah 1.1",
+                    "## "
+                ],
+                position: new Position(1, 0),
+                finalPosition: new Position(1, 3),
+            },
+            {
+                input: [
+                    "## Blah blah 1.1",
+                    "## "
+                ],
+                output: [
+                    "## Blah blah 1.1",
+                    ""
+                ],
+                position: new Position(1, 3),
+                finalPosition: new Position(1, 0),
+            },
+            {
+                input: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    ""
+                ],
+                output: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    "## "
+                ],
+                position: new Position(2, 0),
+                finalPosition: new Position(2, 3),
+            },
+            {
+                input: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    "## "
+                    
+                ],
+                output: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    ""
+                ],
+                position: new Position(2, 3),
+                finalPosition: new Position(2, 0),
+            },
+            {
+                input: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    "Blah blah 1.2"
+                ],
+                output: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    "## Blah blah 1.2"
+                ],
+                position: new Position(2, 4),
+                finalPosition: new Position(2, 7),
+            },
+            {
+                input: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    "## Blah blah 1.2"
+                ],
+                output: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    "Blah blah 1.2"
+                ],
+                position: new Position(2, 7),
+                finalPosition: new Position(2, 4),
+            },
+            {
+                input: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    "content",
+                    "content",
+                    "content",
+                    "Blah blah 1.2",
+                    "content",
+                    "content",
+                ],
+                output: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    "content",
+                    "content",
+                    "content",
+                    "## Blah blah 1.2",
+                    "content",
+                    "content",
+                ],
+                position: new Position(5, 4),
+                finalPosition: new Position(5, 7),
+            },
+            {
+                input: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    "content",
+                    "content",
+                    "content",
+                    "## Blah blah 1.2",
+                    "content",
+                    "content",
+                ],
+                output: [
+                    "# Blah blah 1",
+                    "## Blah blah 1.1",
+                    "content",
+                    "content",
+                    "content",
+                    "Blah blah 1.2",
+                    "content",
+                    "content",
+                ],
+                position: new Position(5, 7),
+                finalPosition: new Position(5, 4),
+            },
+        ];
+
+        await runTestCasesOnCommand(testCases, "markdown-org-mode.toggleLineAndHeading");
+    });
+});

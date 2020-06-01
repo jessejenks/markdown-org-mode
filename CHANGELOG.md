@@ -10,3 +10,4 @@ Based on [Keep a Changelog](http://keepachangelog.com/).
 ## 0.0.1
 ### Adds
 - Inserting headings and subheadings.
+- Toggling between lines and headings, with proper scoping.

@@ -3,6 +3,7 @@ import {
     TextEditor,
     TextEditorEdit,
     Position,
+    Range,
 } from "vscode";
 import {
     HEADER_SYMBOL,
@@ -11,8 +12,9 @@ import {
     getCursorPosition,
     moveCursorToEndOfLine,
     getLine,
+    getStartOfCurrentScope,
+    getStartOfHeading,
 } from "./utils";
-
 
 export function insertHeading(textEditor: TextEditor, edit: TextEditorEdit) {
     const currentScope = getCurrentScope(textEditor);
@@ -74,4 +76,31 @@ function insertHeadingAtPosition(
     if (options.goToEndOfLine) {
         moveCursorToEndOfLine(textEditor, position);
     }
+}
+
+export function toggleLineAndHeading(textEditor: TextEditor, edit: TextEditorEdit) {
+    const cursorPos = getCursorPosition();
+    if (cursorPos === null) {
+        return;
+    }
+
+    const currentLine = getLine(textEditor.document, cursorPos);
+    const startOfHeading = getStartOfHeading(currentLine);
+
+    if (startOfHeading !== null) {
+        const numCharsToRemove = startOfHeading.length + 1;
+        edit.delete(new Range(cursorPos.with({ character: 0 }), cursorPos.with({ character: numCharsToRemove })));
+        return;
+    }
+
+    let depth = 1;
+    const headerPrefix = getStartOfCurrentScope(textEditor.document, cursorPos);
+    if (headerPrefix !== null) {
+        depth = Math.min(headerPrefix.startOfHeading.length, MAX_HEADER_DEPTH);
+    }
+
+    insertHeadingAtPosition(textEditor, edit, depth, cursorPos.with({ character: 0 }), {
+        addNewlineOnNonemptyLine: false,
+        goToEndOfLine: false,
+    });
 }
