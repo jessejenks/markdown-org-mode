@@ -38,6 +38,14 @@
             {
                 "command": "markdownOrgMode.promoteHeading",
                 "title": "Markdown Org Mode: Promote Markdown Heading"
+            },
+            {
+                "command": "markdownOrgMode.demoteTree",
+                "title": "Markdown Org Mode: Demote Markdown Tree"
+            },
+            {
+                "command": "markdownOrgMode.promoteTree",
+                "title": "Markdown Org Mode: Promote Markdown Tree"
             }
         ],
         "menus": {
@@ -60,6 +68,14 @@
                 },
                 {
                     "command": "markdownOrgMode.promoteHeading",
+                    "when": "editorLangId == 'markdown'"
+                },
+                {
+                    "command": "markdownOrgMode.demoteTree",
+                    "when": "editorLangId == 'markdown'"
+                },
+                {
+                    "command": "markdownOrgMode.promoteTree",
                     "when": "editorLangId == 'markdown'"
                 }
             ]

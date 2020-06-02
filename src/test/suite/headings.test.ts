@@ -398,7 +398,7 @@ suite("Tests Inserting Subheadings", () => {
     });
 });
 
-suite("Toggling between lines and heading", () => {
+suite("Tests Toggling Headings", () => {
     test ("Should toggle lines and top level headings", async () => {
         const testCases: CommandTestCase[] = [
             {
@@ -697,7 +697,7 @@ suite("Tests Demoting Headings", () => {
                 ],
             }
         ];
-        await runTestCasesOnCommand(testCases, "markdown-org-mode.demoteHeading");
+        await runTestCasesOnCommand(testCases, "markdownOrgMode.demoteHeading");
     });
 });
 
@@ -803,6 +803,6 @@ suite("Tests Promoting Headings", () => {
                 ],
             }
         ];
-        await runTestCasesOnCommand(testCases, "markdown-org-mode.promoteHeading");     
+        await runTestCasesOnCommand(testCases, "markdownOrgMode.promoteHeading");     
     });
 });

@@ -12,3 +12,4 @@ Based on [Keep a Changelog](http://keepachangelog.com/).
 - Inserting headings and subheadings.
 - Toggling between lines and headings, with proper scoping.
 - Promoting and demoting headings.
+- Promoting and demoting entire heading sections (trees).
