@@ -28,8 +28,16 @@
                 "title": "Markdown Org Mode: Insert Subheading"
             },
             {
-                "command": "markdown-org-mode.toggleLineAndHeading",
+                "command": "markdownOrgMode.toggleLineAndHeading",
                 "title": "Markdown Org Mode: Toggle between line and heading"
+            },
+            {
+                "command": "markdownOrgMode.demoteHeading",
+                "title": "Markdown Org Mode: Demote Markdown Heading"
+            },
+            {
+                "command": "markdownOrgMode.promoteHeading",
+                "title": "Markdown Org Mode: Promote Markdown Heading"
             }
         ],
         "menus": {
@@ -43,7 +51,15 @@
                     "when": "editorLangId == 'markdown'"
                 },
                 {
-                    "command": "markdown-org-mode.toggleLineAndHeading",
+                    "command": "markdownOrgMode.toggleLineAndHeading",
+                    "when": "editorLangId == 'markdown'"
+                },
+                {
+                    "command": "markdownOrgMode.demoteHeading",
+                    "when": "editorLangId == 'markdown'"
+                },
+                {
+                    "command": "markdownOrgMode.promoteHeading",
                     "when": "editorLangId == 'markdown'"
                 }
             ]

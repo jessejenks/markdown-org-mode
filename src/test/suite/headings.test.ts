@@ -463,7 +463,7 @@ suite("Toggling between lines and heading", () => {
             },
         ];
 
-        await runTestCasesOnCommand(testCases, "markdown-org-mode.toggleLineAndHeading");
+        await runTestCasesOnCommand(testCases, "markdownOrgMode.toggleLineAndHeading");
     });
 
     test("Should toggle lines and headings with correct scope depth", async () => {
@@ -599,6 +599,142 @@ suite("Toggling between lines and heading", () => {
             },
         ];
 
-        await runTestCasesOnCommand(testCases, "markdown-org-mode.toggleLineAndHeading");
+        await runTestCasesOnCommand(testCases, "markdownOrgMode.toggleLineAndHeading");
+    });
+});
+
+suite("Tests Demoting Headings", () => {
+    // not sure if there is a way to check that a window warning was issued
+    // maybe mock `window.showWarningMessage`?
+    test("Should fail to demote non-heading line", async () => {
+        const testCases: CommandTestCase[] = [
+            {
+                input: "",
+                output: "",
+                position: new Position(0, 0),
+                finalPosition: new Position(0, 0),
+            },
+            {
+                input: "blah blah blah",
+                output: "blah blah blah",
+                position: new Position(0, 3),
+                finalPosition: new Position(0, 3),
+            },
+        ];
+
+        await runTestCasesOnCommand(testCases, "markdownOrgMode.demoteHeading");
+    });
+
+    test("Should demote heading lines up to the maximum depth", async () => {
+        const testCases: CommandTestCase[] = [
+            {
+                input: "# Heading",
+                output: "## Heading",
+                position: new Position(0, 3),
+                finalPosition: new Position(0, 4),
+            },
+            {
+                input: "## Heading",
+                output: "### Heading",
+                position: new Position(0, 4),
+                finalPosition: new Position(0, 5),
+            },
+            {
+                input: "### Heading",
+                output: "#### Heading",
+                position: new Position(0, 5),
+                finalPosition: new Position(0, 6),
+            },
+            {
+                input: "#### Heading",
+                output: "##### Heading",
+                position: new Position(0, 6),
+                finalPosition: new Position(0, 7),
+            },
+            {
+                input: "##### Heading",
+                output: "###### Heading",
+                position: new Position(0, 7),
+                finalPosition: new Position(0, 8),
+            },
+            {
+                input: "###### Heading",
+                output: "###### Heading", // stays the same
+                position: new Position(0, 8),
+                finalPosition: new Position(0, 8),
+            },
+        ];
+
+        await runTestCasesOnCommand(testCases, "markdownOrgMode.demoteHeading");
+    });
+});
+
+suite("Tests Promoting Headings", () => {
+    test("Should fail to promote non-heading line", async () => {
+        const testCases: CommandTestCase[] = [
+            {
+                input: "",
+                output: "",
+                position: new Position(0, 0),
+                finalPosition: new Position(0, 0),
+            },
+            {
+                input: "blah blah blah",
+                output: "blah blah blah",
+                position: new Position(0, 3),
+                finalPosition: new Position(0, 3),
+            },
+        ];
+
+        await runTestCasesOnCommand(testCases, "markdownOrgMode.promoteHeading");
+    });
+
+    test("Should promote heading lines up to the top-level depth", async () => {
+        const testCases: CommandTestCase[] = [
+            {
+                input: "####### Heading",
+                output: "###### Heading", // works even though this isn't technically a valid heading
+                position: new Position(0, 8),
+                finalPosition: new Position(0, 7),
+            },
+            {
+                input: "###### Heading",
+                output: "##### Heading",
+                position: new Position(0, 8),
+                finalPosition: new Position(0, 7),
+            },
+            {
+                input: "##### Heading",
+                output: "#### Heading",
+                position: new Position(0, 7),
+                finalPosition: new Position(0, 6),
+            },
+            {
+                input: "#### Heading",
+                output: "### Heading",
+                position: new Position(0, 6),
+                finalPosition: new Position(0, 5),
+            },
+            {
+                input: "### Heading",
+                output: "## Heading",
+                position: new Position(0, 5),
+                finalPosition: new Position(0, 4),
+            },
+            {
+                input: "## Heading",
+                output: "# Heading",
+                position: new Position(0, 4),
+                finalPosition: new Position(0, 3),
+            },
+            {
+                input: "# Heading",
+                output: "# Heading", // Can't promote any higher
+                position: new Position(0, 3),
+                finalPosition: new Position(0, 3),
+            },
+        ];
+
+        await runTestCasesOnCommand(testCases, "markdownOrgMode.promoteHeading");
     });
 });

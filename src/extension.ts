@@ -6,6 +6,8 @@ import {
     insertHeading,
     insertSubheading,
     toggleLineAndHeading,
+    demoteHeading,
+    promoteHeading,
 } from "./headings";
 
 export function activate(context: ExtensionContext) {
@@ -14,13 +16,18 @@ export function activate(context: ExtensionContext) {
         insertSubheading,
     );
 
-    const toggleLineAndHeadingCmd = commands.registerTextEditorCommand("markdown-org-mode.toggleLineAndHeading",
+    const toggleLineAndHeadingCmd = commands.registerTextEditorCommand("markdownOrgMode.toggleLineAndHeading",
         toggleLineAndHeading,
     );
+    const demoteHeadingCmd = commands.registerTextEditorCommand("markdownOrgMode.demoteHeading", demoteHeading);
+    const promoteHeadingCmd = commands.registerTextEditorCommand("markdownOrgMode.promoteHeading", promoteHeading);
+
     context.subscriptions.push(insertHeadingCmd);
     context.subscriptions.push(insertSubheadingCmd);
 
     context.subscriptions.push(toggleLineAndHeadingCmd);
+    context.subscriptions.push(demoteHeadingCmd);
+    context.subscriptions.push(promoteHeadingCmd);
 }
 
 export function deactivate() {}

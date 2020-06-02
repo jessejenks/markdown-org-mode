@@ -11,3 +11,4 @@ Based on [Keep a Changelog](http://keepachangelog.com/).
 ### Adds
 - Inserting headings and subheadings.
 - Toggling between lines and headings, with proper scoping.
+- Promoting and demoting headings.

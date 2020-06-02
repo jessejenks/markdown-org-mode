@@ -104,6 +104,15 @@ export function getCursorPosition() {
     return activeEditor.selection.active;
 }
 
+export function getCursorPositions() {
+    const activeEditor = window.activeTextEditor;
+    if (activeEditor === undefined) {
+        return null;
+    }
+
+    return activeEditor.selections.map(selection => selection.active);
+}
+
 export type StartOfScope = {
     startOfHeading: string;
     startPosition: Position;
