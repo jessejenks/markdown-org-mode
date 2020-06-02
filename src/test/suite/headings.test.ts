@@ -667,6 +667,38 @@ suite("Tests Demoting Headings", () => {
 
         await runTestCasesOnCommand(testCases, "markdownOrgMode.demoteHeading");
     });
+
+    test("Should demote headings with multiple cursors", async () => {
+        const testCases: CommandTestCase[] = [
+            {
+                input: [
+                    "",
+                    "Blah",
+                    "# Blah",
+                    "## Blah",
+                ],
+                output: [
+                    "",
+                    "Blah",
+                    "## Blah",
+                    "### Blah",
+                ],
+                position: [
+                    new Position(0, 0),
+                    new Position(1, 3),
+                    new Position(2, 3),
+                    new Position(3, 3),
+                ],
+                finalPosition: [
+                    new Position(0, 0),
+                    new Position(1, 3),
+                    new Position(2, 4),
+                    new Position(3, 4),
+                ],
+            }
+        ];
+        await runTestCasesOnCommand(testCases, "markdown-org-mode.demoteHeading");
+    });
 });
 
 suite("Tests Promoting Headings", () => {
@@ -736,5 +768,41 @@ suite("Tests Promoting Headings", () => {
         ];
 
         await runTestCasesOnCommand(testCases, "markdownOrgMode.promoteHeading");
+    });
+
+    test("Should promote headings with multiple cursors", async () => {
+        const testCases: CommandTestCase[] = [
+            {
+                input: [
+                    "",
+                    "Blah",
+                    "# Blah",
+                    "## Blah",
+                    "### Blah",
+                ],
+                output: [
+                    "",
+                    "Blah",
+                    "# Blah",
+                    "# Blah",
+                    "## Blah",
+                ],
+                position: [
+                    new Position(0, 0),
+                    new Position(1, 3),
+                    new Position(2, 3),
+                    new Position(3, 3),
+                    new Position(4, 3),
+                ],
+                finalPosition: [
+                    new Position(0, 0),
+                    new Position(1, 3),
+                    new Position(2, 3),
+                    new Position(3, 2),
+                    new Position(4, 2),
+                ],
+            }
+        ];
+        await runTestCasesOnCommand(testCases, "markdown-org-mode.promoteHeading");     
     });
 });
