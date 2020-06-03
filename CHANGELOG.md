@@ -13,3 +13,5 @@ Based on [Keep a Changelog](http://keepachangelog.com/).
 - Toggling between lines and headings, with proper scoping.
 - Promoting and demoting headings.
 - Promoting and demoting entire heading sections (trees).
+- Toggling between lines and checkboxes.
+- User configuration options for specifying a "check" symbol. Defaults to `x`.

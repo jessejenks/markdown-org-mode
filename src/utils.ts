@@ -1,5 +1,6 @@
 import {
     window,
+    workspace,
     Position,
     TextEditor,
     TextDocument,
@@ -166,4 +167,81 @@ export function moveCursorToEndOfLine(editor: TextEditor, pos: Position) {
     const endOfLine = curLine.length;
     const endOfLinePos = new Position(pos.line, endOfLine);
     editor.selections = [new Selection(endOfLinePos, endOfLinePos)];
+}
+
+type CharacterRange = {
+    start: number;
+    end: number;
+}
+export function characterRangeToRange(position: Position, characterRange: CharacterRange) {
+    return new Range(
+        position.with({ character: characterRange.start }),
+        position.with({ character: characterRange.end }),
+    );
+}
+
+export interface CheckboxPrefix {
+    matchedBox: string;
+    boxRange: CharacterRange;
+    matchedSymbol: string;
+    symbolRange: CharacterRange;
+}
+interface RegExpIdentifier {
+    regex: RegExp;
+}
+export interface CheckboxIdentifier extends RegExpIdentifier {
+    symbol: string;
+}
+
+
+export function findCheckboxPrefix(line: string, checkboxIdentifier: CheckboxIdentifier) {
+    const match = line.match(checkboxIdentifier.regex);
+    if (match === null) {
+        return null;
+    }
+
+    const offset = match[1].length;
+    const matchedBox = match[2];
+    const matchedSymbol = match[4];
+    const checkboxPrefix: CheckboxPrefix = {
+        matchedBox,
+        boxRange: {
+            start: offset,
+            end: offset + matchedBox.length
+        },
+        matchedSymbol,
+        symbolRange: {
+            start: offset + match[3].length,
+            end: offset + match[3].length + matchedSymbol.length,
+        }
+    }
+
+    return checkboxPrefix;
+}
+
+export function getCheckboxIdentifier() {
+    const symbol = getCheckboxSymbol();
+    const regex = getStartOfCheckboxRegEx(symbol);
+    const identifier: CheckboxIdentifier = {
+        symbol,
+        regex,
+    }
+    return identifier;
+}
+
+function getStartOfCheckboxRegEx(checkboxSymbol: string) {
+    return new RegExp(`^([ \\t]*)((- \\[)( |${escapeStringForRegExp(checkboxSymbol)})\\][ \\t]+)`);
+}
+
+function getCheckboxSymbol() {
+    const checkboxSymbol = workspace.getConfiguration("markdownOrgMode").get<string>("checkboxSymbol");
+    if (checkboxSymbol === undefined) {
+        return "x";
+    }
+
+    return checkboxSymbol;
+}
+
+function escapeStringForRegExp(str: string) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

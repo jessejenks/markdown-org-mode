@@ -13,6 +13,7 @@ import {
     promoteTree,
     demoteTree,
 } from "./trees";
+import { toggleLineAndCheckbox } from "./checkboxes";
 
 export function activate(context: ExtensionContext) {
     const insertHeadingCmd = commands.registerTextEditorCommand("markdownOrgMode.insertHeading", insertHeading);
@@ -23,6 +24,10 @@ export function activate(context: ExtensionContext) {
     const toggleLineAndHeadingCmd = commands.registerTextEditorCommand("markdownOrgMode.toggleLineAndHeading",
         toggleLineAndHeading,
     );
+    const toggleLineAndCheckboxCmd = commands.registerTextEditorCommand("markdownOrgMode.toggleLineAndCheckbox",
+        toggleLineAndCheckbox,
+    );
+
     const demoteHeadingCmd = commands.registerTextEditorCommand("markdownOrgMode.demoteHeading", demoteHeading);
     const promoteHeadingCmd = commands.registerTextEditorCommand("markdownOrgMode.promoteHeading", promoteHeading);
 
@@ -33,6 +38,8 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(insertSubheadingCmd);
 
     context.subscriptions.push(toggleLineAndHeadingCmd);
+    context.subscriptions.push(toggleLineAndCheckboxCmd);
+
     context.subscriptions.push(demoteHeadingCmd);
     context.subscriptions.push(promoteHeadingCmd);
 

@@ -32,6 +32,10 @@
                 "title": "Markdown Org Mode: Toggle between line and heading"
             },
             {
+                "command": "markdownOrgMode.toggleLineAndCheckbox",
+                "title": "Markdown Org Mode: Toggle between line and checkbox"
+            },
+            {
                 "command": "markdownOrgMode.demoteHeading",
                 "title": "Markdown Org Mode: Demote Markdown Heading"
             },
@@ -63,6 +67,10 @@
                     "when": "editorLangId == 'markdown'"
                 },
                 {
+                    "command": "markdownOrgMode.toggleLineAndCheckbox",
+                    "when": "editorLangId == 'markdown'"
+                },
+                {
                     "command": "markdownOrgMode.demoteHeading",
                     "when": "editorLangId == 'markdown'"
                 },
@@ -79,6 +87,18 @@
                     "when": "editorLangId == 'markdown'"
                 }
             ]
+        },
+        "configuration": {
+            "type": "object",
+            "title": "Markdown Org Mode",
+            "properties": {
+                "markdownOrgMode.checkboxSymbol": {
+                    "type": "string",
+                    "description": "The symbol to use for a checked checkbox item, e.g. `- [x] item`.",
+                    "default": "x",
+                    "pattern": "^\\S$"
+                }
+            }
         }
     },
     "scripts": {
