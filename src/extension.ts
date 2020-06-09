@@ -14,6 +14,10 @@ import {
     demoteTree,
 } from "./trees";
 import { toggleLineAndCheckbox } from "./checkboxes";
+import {
+    incrementContext,
+    decrementContext,
+} from "./modify-context";
 
 export function activate(context: ExtensionContext) {
     const insertHeadingCmd = commands.registerTextEditorCommand("markdownOrgMode.insertHeading", insertHeading);
@@ -34,6 +38,13 @@ export function activate(context: ExtensionContext) {
     const demoteTreeCmd = commands.registerTextEditorCommand("markdownOrgMode.demoteTree", demoteTree);
     const promoteTreeCmd = commands.registerTextEditorCommand("markdownOrgMode.promoteTree", promoteTree);
 
+    const incrementContextCmd = commands.registerTextEditorCommand("markdownOrgMode.incrementContext",
+        incrementContext
+    );
+    const decrementContextCmd = commands.registerTextEditorCommand("markdownOrgMode.decrementContext",
+        decrementContext
+    );
+
     context.subscriptions.push(insertHeadingCmd);
     context.subscriptions.push(insertSubheadingCmd);
 
@@ -45,6 +56,9 @@ export function activate(context: ExtensionContext) {
 
     context.subscriptions.push(demoteTreeCmd);
     context.subscriptions.push(promoteTreeCmd);
+
+    context.subscriptions.push(incrementContextCmd);
+    context.subscriptions.push(decrementContextCmd);
 }
 
 export function deactivate() {}

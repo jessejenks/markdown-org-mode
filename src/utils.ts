@@ -186,11 +186,22 @@ export interface CheckboxPrefix {
     matchedSymbol: string;
     symbolRange: CharacterRange;
 }
+export interface TodoPrefix {
+    matchedKeyword: string | null;
+    keywordRange: CharacterRange;
+    keywordWithPaddingRange: CharacterRange;
+}
+export type Prefix = CheckboxPrefix | TodoPrefix;
+
+
 interface RegExpIdentifier {
     regex: RegExp;
 }
 export interface CheckboxIdentifier extends RegExpIdentifier {
     symbol: string;
+}
+export interface TodoIdentifier extends RegExpIdentifier {
+    keywords: string[];
 }
 
 
@@ -240,6 +251,54 @@ function getCheckboxSymbol() {
     }
 
     return checkboxSymbol;
+}
+
+export function findTodoPrefix(line: string, todoIdentifier: TodoIdentifier) {
+    const match = line.match(todoIdentifier.regex);
+    if (match === null) {
+        return null;
+    }
+
+    const offset = match[1].length;
+    const matchedKeywordWithPadding = match[2] === undefined ? null : match[2];
+    const matchedKeyword = match[3] === undefined ? null : match[3];
+
+    const todoPrefix: TodoPrefix = {
+        matchedKeyword,
+        keywordRange: {
+            start: offset + 1,
+            end: offset + 1 + (matchedKeyword === null ? 0 : matchedKeyword.length),
+        },
+        keywordWithPaddingRange: {
+            start: offset,
+            end: offset + (matchedKeywordWithPadding === null ? 0 : matchedKeywordWithPadding.length),
+        }
+    }
+
+    return todoPrefix;
+}
+
+export function getTodoIdentifier() {
+    const keywords = getTodoKeywords();
+    const regex = getStartOfTodoRegEx(keywords);
+    const identifier: TodoIdentifier = {
+        keywords,
+        regex,
+    }
+    return identifier;
+}
+
+function getTodoKeywords() {
+    const todoKeywords = workspace.getConfiguration("markdownOrgMode").get<string[]>("todoKeywords");
+    if (todoKeywords === undefined) {
+        return [];
+    }
+
+    return todoKeywords;
+}
+
+function getStartOfTodoRegEx(todoKeywords: string[]) {
+    return new RegExp(`(^${HEADER_SYMBOL}+)( (${todoKeywords.map(escapeStringForRegExp).join("|")}))?\\s`);
 }
 
 function escapeStringForRegExp(str: string) {

@@ -50,6 +50,14 @@
             {
                 "command": "markdownOrgMode.promoteTree",
                 "title": "Markdown Org Mode: Promote Markdown Tree"
+            },
+            {
+                "command": "markdownOrgMode.incrementContext",
+                "title": "Markdown Org Mode: Increment Current Context"
+            },
+            {
+                "command": "markdownOrgMode.decrementContext",
+                "title": "Markdown Org Mode: Decrement Current Context"
             }
         ],
         "menus": {
@@ -85,6 +93,14 @@
                 {
                     "command": "markdownOrgMode.promoteTree",
                     "when": "editorLangId == 'markdown'"
+                },
+                {
+                    "command": "markdownOrgMode.incrementContext",
+                    "when": "editorLangId == 'markdown'"
+                },
+                {
+                    "command": "markdownOrgMode.decrementContext",
+                    "when": "editorLangId == 'markdown'"
                 }
             ]
         },
@@ -92,6 +108,17 @@
             "type": "object",
             "title": "Markdown Org Mode",
             "properties": {
+                "markdownOrgMode.todoKeywords": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^\\w+$"
+                    },
+                    "default": [
+                        "TODO",
+                        "DONE"
+                    ]
+                },
                 "markdownOrgMode.checkboxSymbol": {
                     "type": "string",
                     "description": "The symbol to use for a checked checkbox item, e.g. `- [x] item`.",
