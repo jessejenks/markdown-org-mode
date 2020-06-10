@@ -17,6 +17,30 @@
         "onLanguage:markdown"
     ],
     "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "markdownOrgMode.insertHeading",
+                "title": "Markdown Org Mode: Insert Heading"
+            },
+            {
+                "command": "markdownOrgMode.insertSubheading",
+                "title": "Markdown Org Mode: Insert Subheading"
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "markdownOrgMode.insertHeading",
+                    "when": "editorLangId == 'markdown'"
+                },
+                {
+                    "command": "markdownOrgMode.insertSubheading",
+                    "when": "editorLangId == 'markdown'"
+                }
+            ]
+        }
+    },
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",

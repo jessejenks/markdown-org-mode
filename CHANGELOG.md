@@ -6,3 +6,7 @@ this file.
 Based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
+
+## 0.0.1
+### Adds
+- Inserting headings and subheadings.
