@@ -7,7 +7,7 @@ Based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
 
-## 0.0.1
+## [0.0.1] - 2020-06-11
 ### Adds
 - Inserting headings and subheadings.
 - Toggling between lines and headings, with proper scoping.
@@ -25,3 +25,5 @@ Based on [Keep a Changelog](http://keepachangelog.com/).
 - User configuration options for specifying "todo" keywords. Defaults are
     - `TODO`
     - `DONE`
+
+[0.0.1]: https://github.com/jessejenks/markdown-org-mode/releases/tag/v0.0.1

@@ -2,7 +2,7 @@
     "name": "markdown-org-mode",
     "displayName": "Markdown Org Mode",
     "description": "Org Mode features with markdown syntax",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "engines": {
         "vscode": "^1.45.0"
     },
