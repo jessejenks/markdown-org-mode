@@ -7,8 +7,20 @@ Based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2020-06-12
+### Added
+- Decorators for highlighting keywords by priority.
+- Theme-able colors corresponding to each priority level.
+
+### Changed
+- Todo keyword formatting. Now allows for specifying a priority.
+
+### Fixed
+- Changed "Adds" to "Added" in version 0.0.1 release notes per
+"Keep a Changelog" guidelines.
+
 ## [0.0.1] - 2020-06-11
-### Adds
+### Added
 - Inserting headings and subheadings.
 - Toggling between lines and headings, with proper scoping.
 - Promoting and demoting headings.
@@ -26,4 +38,5 @@ Based on [Keep a Changelog](http://keepachangelog.com/).
     - `TODO`
     - `DONE`
 
+[0.1.0]: https://github.com/jessejenks/markdown-org-mode/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/jessejenks/markdown-org-mode/releases/tag/v0.0.1

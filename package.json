@@ -104,6 +104,44 @@
                 }
             ]
         },
+        "colors": [
+            {
+                "id": "markdownOrgMode.highPriorityColor",
+                "description": "",
+                "defaults": {
+                    "dark": "#ff7373",
+                    "light": "#d81919",
+                    "highContrast": "#ff9393"
+                }
+            },
+            {
+                "id": "markdownOrgMode.mediumPriorityColor",
+                "description": "",
+                "defaults": {
+                    "dark": "#ffdc97",
+                    "light": "#ffaa00",
+                    "highContrast": "#ffd47e"
+                }
+            },
+            {
+                "id": "markdownOrgMode.normalPriorityColor",
+                "description": "",
+                "defaults": {
+                    "dark": "#b7eeb1",
+                    "light": "#32bd22",
+                    "highContrast": "#99ff8e"
+                }
+            },
+            {
+                "id": "markdownOrgMode.lowPriorityColor",
+                "description": "",
+                "defaults": {
+                    "dark": "#6699cc",
+                    "light": "#608ebd",
+                    "highContrast": "#8fc7ff"
+                }
+            }
+        ],
         "configuration": {
             "type": "object",
             "title": "Markdown Org Mode",
@@ -112,10 +150,13 @@
                     "type": "array",
                     "items": {
                         "type": "string",
-                        "pattern": "^\\w+$"
+                        "pattern": "^[A-Z][A-Z_]*:?(\\.(high|medium|low))?$",
+                        "patternErrorMessage": "Invalid TODO keyword format. Please see README for valid formats."
                     },
+                    "minItems": 1,
+                    "uniqueItems": true,
                     "default": [
-                        "TODO",
+                        "TODO.high",
                         "DONE"
                     ]
                 },

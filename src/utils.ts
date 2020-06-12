@@ -10,7 +10,7 @@ import {
 
 export const HEADER_SYMBOL = "#";
 export const MAX_HEADER_DEPTH = 6;
-const START_OF_HEADER_LINE_REGEX = new RegExp(`^${HEADER_SYMBOL}+( |\\t)`);
+const START_OF_HEADER_LINE_REG_EXP = new RegExp(`^${HEADER_SYMBOL}+( |\\t)`);
 
 export class Scope extends Range {
     depth: number = 0;
@@ -150,7 +150,7 @@ export function getStartOfCurrentScope(document: TextDocument, cursorPosition: P
 }
 
 export function getStartOfHeading(line: string) {
-    const startOfHeading = line.match(START_OF_HEADER_LINE_REGEX);
+    const startOfHeading = line.match(START_OF_HEADER_LINE_REG_EXP);
     if (startOfHeading === null) {
         return null;
     }
@@ -244,9 +244,10 @@ function getStartOfCheckboxRegEx(checkboxSymbol: string) {
     return new RegExp(`^([ \\t]*)((- \\[)( |${escapeStringForRegExp(checkboxSymbol)})\\][ \\t]+)`);
 }
 
+const CHECKBOX_REGEXP = /^\S$/;
 function getCheckboxSymbol() {
     const checkboxSymbol = workspace.getConfiguration("markdownOrgMode").get<string>("checkboxSymbol");
-    if (checkboxSymbol === undefined) {
+    if (checkboxSymbol === undefined || !CHECKBOX_REGEXP.test(checkboxSymbol)) {
         return "x";
     }
 
@@ -288,19 +289,56 @@ export function getTodoIdentifier() {
     return identifier;
 }
 
-function getTodoKeywords() {
-    const todoKeywords = workspace.getConfiguration("markdownOrgMode").get<string[]>("todoKeywords");
-    if (todoKeywords === undefined) {
+export function getTodoKeywords() {
+    const todoKeywords = getTodoKeywordsWithPriority();
+    return todoKeywords.map(stripPriority);
+}
+
+const KEYWORD_WITH_PRIORITY_REG_EXP = /^([A-Z][A-Z_]*:?)(\.(high|medium|low))?$/
+export function stripPriority(keywordMaybeWithPriority: string) {
+    const match = keywordMaybeWithPriority.match(KEYWORD_WITH_PRIORITY_REG_EXP);
+    if (match === null) {
+        return "";
+    }
+    return match[1];
+}
+
+export type TodoPriority = "high" | "medium" | "normal" | "low";
+export function getTodoKeywordsWithPriority() {
+    const todoKeywordsWithPriority = workspace.getConfiguration("markdownOrgMode").get<string[]>("todoKeywords");
+    if (todoKeywordsWithPriority === undefined) {
         return [];
     }
-
-    return todoKeywords;
+    return todoKeywordsWithPriority.filter(keyword => KEYWORD_WITH_PRIORITY_REG_EXP.test(keyword));
 }
 
-function getStartOfTodoRegEx(todoKeywords: string[]) {
-    return new RegExp(`(^${HEADER_SYMBOL}+)( (${todoKeywords.map(escapeStringForRegExp).join("|")}))?\\s`);
+export function convertKeywordToPriorityMap(todoKeywordsWithPriority: string[]) {
+    let todoKeywordWithPriority: string;
+    let todoKeyword: string;
+    let match: RegExpMatchArray | null;
+    let priority: TodoPriority;
+
+    const mapping: Record<string, TodoPriority> = {};
+
+    for (let i = 0; i < todoKeywordsWithPriority.length; i++) {
+        todoKeywordWithPriority = todoKeywordsWithPriority[i];
+        match = todoKeywordWithPriority.match(KEYWORD_WITH_PRIORITY_REG_EXP);
+        if (match === null) {
+            continue;
+        }
+
+        todoKeyword = match[1];
+        priority = match[3] === undefined ? "normal" : match[3] as TodoPriority;
+        mapping[todoKeyword] = priority;
+    }
+
+    return mapping;
 }
 
-function escapeStringForRegExp(str: string) {
+export function getStartOfTodoRegEx(todoKeywords: string[]) {
+    return new RegExp(`^(${HEADER_SYMBOL}+)( (${todoKeywords.join("|")}))?(\\s|$)`);
+}
+
+export function escapeStringForRegExp(str: string) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

@@ -1,6 +1,9 @@
 import {
-    ExtensionContext,
+    window,
+    workspace,
     commands,
+    ExtensionContext,
+    ConfigurationChangeEvent,
 } from "vscode";
 import {
     insertHeading,
@@ -18,6 +21,7 @@ import {
     incrementContext,
     decrementContext,
 } from "./modify-context";
+import { TodoDecorators } from "./TodoDecorators";
 
 export function activate(context: ExtensionContext) {
     const insertHeadingCmd = commands.registerTextEditorCommand("markdownOrgMode.insertHeading", insertHeading);
@@ -59,6 +63,39 @@ export function activate(context: ExtensionContext) {
 
     context.subscriptions.push(incrementContextCmd);
     context.subscriptions.push(decrementContextCmd);
+
+    handleDecorators(context);
+}
+
+function handleDecorators(context: ExtensionContext) {
+    const myDecorations = new TodoDecorators();
+
+    if (myDecorations.activeTextEditor !== undefined) {
+        myDecorations.triggerUpdateDecorations();
+    }
+
+    workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
+        if (event.affectsConfiguration("markdownOrgMode.todoKeywords")) {
+            myDecorations.updateTodoKeywords();
+        }
+    });
+
+    window.onDidChangeActiveTextEditor(textEditor => {
+        myDecorations.activeTextEditor = textEditor;
+        if (textEditor !== undefined) {
+            myDecorations.triggerUpdateDecorations();
+        }
+    }, null, context.subscriptions);
+
+    workspace.onDidChangeTextDocument(event => {
+        if (myDecorations.activeTextEditor === undefined) {
+            myDecorations.activeTextEditor = window.activeTextEditor;
+        }
+
+        if (myDecorations.activeTextEditor !== undefined && event.document === myDecorations.activeTextEditor.document) {
+            myDecorations.triggerUpdateDecorations();
+        }
+    }, null, context.subscriptions);
 }
 
 export function deactivate() {}
